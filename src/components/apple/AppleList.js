@@ -2,36 +2,6 @@ import React, { Component } from 'react'
 import { Table, Button} from 'reactstrap'
 import AppleModal  from './AppleModal.js'
 
-document.title = 'Список сортов';
-/*let appleList = [
-  {
-    id: 1,
-    name: 'Белый налив',
-    description: `Широко известный и очень популярный сорт. 
-                  Полакомиться таким можно уже в начале июля. 
-                  Высота взрослого дерева составляет 3–5 м, плоды округлые, 
-                  зеленоватого цвета, в стадии полной спелости становятся почти белыми. 
-                  Мякоть ароматная, несколько рыхлая и крупнозернистая. 
-                  Умеренно кисловатая. 
-                  Очень важно убирать урожай, не допуская перезревания, поскольку в этом случае он теряет качества. 
-                  Сорванные фрукты портятся довольно быстро, поэтому использовать их нужно, не мешкая. 
-                  Белый налив зимостоек, в плодоношение саженец вступает на 5-ый год.`,
-    season: 'Лето',
-    dateAdded: new Date().toISOString()
-  },
-  {
-    id: 2,
-    name: 'Макинтош',
-    description: `Сорт канадский, фрукты средние, желто-зеленые, с покровом из почти фиолетовых полос на красном фоне. 
-                  Середина белая, часто имеет характерные красноватые прожилки, приятно пряная. 
-                  Отличный коммерческий сорт. Сильнорослое и раскидистое дерево. 
-                  Уборка – с сентября, есть его можно до середины зимы. 
-                  Недостаток – низкая морозоустойчивость и восприимчивость к болезням.`,
-    season: 'Осень',
-    dateAdded: new Date(2011, 0, 1, 2, 3, 4, 567).toISOString()
-  }
-]*/
-
 class AppleList extends Component {
 
   constructor(props) {
@@ -39,17 +9,20 @@ class AppleList extends Component {
 
     this.state = {
       items: [],
-      editableApple: {},
+      editableItem: {},
       isModalOpened: false,
-      selectedApples: {}
-     /* modal: false,
-      model: {},
-      error: false*/
+      selectedItems: [],
+      modalKey: Date.now()
     }
+  }
+
+  componentDidMount() {
+    document.title = 'Список сортов';
   }
 
   toggle() {
     this.setState({
+      modalKey: Date.now(),
       isModalOpened: !this.state.isModalOpened
     });
   }
@@ -57,102 +30,91 @@ class AppleList extends Component {
   addItem(model){
     let item = Object.assign({}, model)
     item.dateAdded = new Date().getTime()
-    item.id = this.state.items && this.state.items.length>0 ? Number(this.state.items.length)+1 : 1;
+    item.id = Date.now();
     this.state.items.push(item);
     this.setState({
       items: this.state.items
     })
     this.toggle()
+    this.unselectItems()
   }
 
   updateItem(model){
-    var apples = this.state.items;
-    for (var i = 0; i <apples.length; i++) {
-      console.log(apples[i].id, model.id)
-      if (apples[i].id ===  model.id) {
-        apples[i] = Object.assign(apples[i], model)
+    var items = this.state.items;
+    for (var i = 0; i <items.length; i++) {
+      if (items[i].id ===  model.id) {
+        items[i] = Object.assign(items[i], model)
       }
     }
     this.setState({
-      items: apples
+      items: items
     })
     this.toggle()
-  }
-
-  isEmpty(obj) {
-    for (var key in obj) {
-      if(obj[key]){
-        return false;
-      }
-    }
-    return true;
-  }
-
-  getSelectedApples() {
-    var apples = [];
-    for (var i = 0; i < this.state.items.length; i++) {
-      if (this.state.selectedApples[this.state.items[i].id] ) {
-        apples.push(this.state.items[i]);
-      }
-    }
-    return apples;
+    this.unselectItems()
   }
 
   disableCreateButton(){
-    return !(this.getSelectedApples().length === 1);
+    return this.state.selectedItems.length !== 1
   }
 
   disableDeleteButton(){
-    return (this.getSelectedApples().length  === 0);
+    return this.state.selectedItems.length === 0
   }
 
-  createItem(){
-    var apples = this.getSelectedApples()
-    if(apples.length === 1){
-      this.setState({editableApple: apples[0]})
-      this.toggle(this);
+  showUpdateModal(){
+    if(this.state.selectedItems.length === 1){
+      let editableItem = this.state.items.find((item)=>item.id === this.state.selectedItems[0])
+      if(editableItem){
+        this.setState({editableItem: editableItem})
+        this.toggle(this);
+      }
     }
   }
 
-  deleteApple(){
-    console.log('Вы действительно хотите удалить?')
+  isItemSelected(item){
+    return this.state.selectedItems.indexOf(item.id) > -1;
   }
-
-  /*isDisabledEdit(){
-    console.log(5);
-    if(this.isEmpty){
-      return true;
-    }
-    if(this.selectedApplesLength(this.state.selectedApples) ===1) {
-      return false;
-    }
-    return true;
-  }*/
-
-/***/
-
-  /*handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
-    event.preventDefault();
-  }*/
-
-  showAddModal(){
+  
+  unselectItems(){
     this.setState({
-      editableApple: {},
-      isModalOpened: true
+      selectedItems: []
     })
   }
 
-  chosenApples(apple){
-    let selectedApples = Object.assign({},this.state.selectedApples);
-    if(!!selectedApples[apple]){
-      selectedApples[apple] = !selectedApples[apple]
-    }else{
-      selectedApples[apple] = true
+  deleteItem(){
+    if(this.state.selectedItems.length > 0){
+      this.setState({
+        items: this.state.items.filter((item) => !this.isItemSelected(item))
+      })
+      this.unselectItems()
     }
+  }
+
+  showAddModal(){
     this.setState({
-      selectedApples: selectedApples
-    });
+      editableItem: {}
+    })
+    this.toggle();
+  }
+
+  toggleItem(item){
+    if(this.isItemSelected(item)){
+      this.unselectItem(item);
+    }else{
+      this.selectItem(item);
+    }
+  }
+  
+  selectItem(item) {
+    let selectedItems = this.state.selectedItems;
+    selectedItems.push(item.id);
+    this.setState(selectedItems);
+  }
+
+  unselectItem(item) {
+    this.setState({
+      selectedItems: this.state.selectedItems.filter(id => item.id !== id)
+    })
   }
 
   templateTable(){
@@ -168,20 +130,19 @@ class AppleList extends Component {
       </thead>
       <tbody>
       {
-        this.state.items.map(apple => (
-          <tr key={apple.id}>
+        this.state.items.map(item => (
+          <tr key={item.id}>
             <td>
               <input type={"checkbox"} className="checkbox"
-                     defaultChecked={false}
-                     value={apple.id}
-                     onChange={this.chosenApples.bind(this, apple.id)}/>
+                     checked={this.isItemSelected(item)}
+                     onChange={() => this.toggleItem(item)}/>
             </td>
-            <td>{apple.id}</td>
-            <td>{apple.name}</td>
-            <td>{new Date(apple.dateAdded).toLocaleString()}</td>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td>{new Date(item.dateAdded).toLocaleString()}</td>
             <td>
-              {apple.description}<br/>
-              {apple.season}
+              {item.description}<br/>
+              {item.season}
             </td>
           </tr>
         ))
@@ -201,15 +162,20 @@ class AppleList extends Component {
           <Button type={'button'} color="primary" size="sm"
                   onClick={this.showAddModal.bind(this)}>Добавить</Button>{' '}
           <Button type={'button'} color="primary" size="sm"
-                  onClick={this.createItem.bind(this)} disabled={this.disableCreateButton()}>Реактировать</Button>{' '}
+                  onClick={this.showUpdateModal.bind(this)}
+                  disabled={this.disableCreateButton()}>Реактировать</Button>{' '}
           <Button type={'button'} color="primary" size="sm"
-                  onClick={this.deleteApple.bind(this)}
+                  onClick={this.deleteItem.bind(this)}
                   disabled={this.disableDeleteButton()}>Удалить</Button>
         </div>
         {
           this.state.items.length ? this.templateTable() : this.notFound()
         }
-        <AppleModal apple={this.state.editableApple} isOpen={this.state.isModalOpened} toggle={this.toggle.bind(this)} saveApple={this.state.editableApple.id ? this.updateItem.bind(this) : this.addItem.bind(this)}/>
+        <AppleModal key={this.state.modalKey}
+                    item={this.state.editableItem}
+                    isOpen={this.state.isModalOpened}
+                    toggle={this.toggle.bind(this)}
+                    saveItem={this.state.editableItem.id ? this.updateItem.bind(this) : this.addItem.bind(this)}/>
       </div>
     )
   }

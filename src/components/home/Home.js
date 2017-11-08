@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 
-document.title = 'Главная';
 class Home extends Component {
+
+  componentDidMount() {
+    document.title = 'Главная';
+  }
 
   render() {
     return (
