@@ -1,0 +1,58 @@
+.App {
+
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.modal-body{
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+.modal-footer,
+.modal-header{
+  padding: 10px 15px;
+}
+
+.modal-title{
+  font-size: 16px;
+}
+
+.form-group{
+  margin-bottom: 1px;
+}
+
+.form-control-label{
+  margin-bottom: 2px;
+  font-size: 14px;
+}
+
+.has-error{
+  color: #e22b41;
+}
+
+.help-block {
+  font-size: 13px;
+}
