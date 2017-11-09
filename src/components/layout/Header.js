@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Navbar, NavbarBrand, NavbarToggler, Collapse, Nav, NavItem } from 'reactstrap'
+import { Navbar, NavbarToggler, Collapse, Nav, NavItem } from 'reactstrap'
 import { Link } from 'react-router-dom'
 
 class Header extends Component {
+
 
   constructor(props) {
     super(props);
@@ -24,7 +25,7 @@ class Header extends Component {
       <div id='App-header'>
         <div className='container'>
           <Navbar color="faded" light expand="md">
-            <NavbarBrand href="/">Example</NavbarBrand>
+            <Link to={'/'} className={'navbar-brand'}>Яблоко</Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>

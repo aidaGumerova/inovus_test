@@ -1,5 +1,14 @@
-.App {
+body {
+  background-color: #edf1f5;
+  font-family: 'Open Sans', sans-serif;
+}
 
+.container {
+  max-width: 100%;
+}
+
+.App {
+  background-color: #edf1f5;
 }
 
 .App-logo {
@@ -7,19 +16,73 @@
   height: 80px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+#App-container{
+  margin-bottom: 25px;
+}
+
+#App-header{
+  background-color: #2cabe3;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#App-header .navbar{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#App-header a {
+  color: #ffffff;
+}
+
+.nav-link{
+  font-size: 14px;
 }
 
 .App-title {
   font-size: 1.5em;
 }
 
+.app-breadcrumb{
+  background-color: transparent;
+  padding: 5px 0;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
 .App-intro {
   font-size: large;
+}
+
+.actions-button-block{
+  margin-bottom: 15px;
+}
+
+.not-found{
+  font-size: 14px;
+  color: #8d9ea7;
+}
+
+.table thead th{
+  border-bottom: none;
+  border-width: 1px;
+}
+
+th{
+  color: #666;
+}
+
+td,
+th{
+  font-size: 14px;
+}
+
+td{
+  color: #797979;
+}
+
+.table-striped tbody tr:nth-of-type(odd){
+  background-color: #f7fafc;
 }
 
 @keyframes App-logo-spin {
@@ -31,6 +94,7 @@
   padding-top: 5px;
   padding-bottom: 10px;
 }
+
 .modal-footer,
 .modal-header{
   padding: 10px 15px;
@@ -55,4 +119,111 @@
 
 .help-block {
   font-size: 13px;
+}
+
+.list-box{
+  background-color: #ffffff;
+  padding: 25px;
+}
+
+.list-box p{
+  font-size: 14px;
+}
+
+button,
+input[type="checkbox"]{
+  cursor: pointer;
+}
+.btn-primary{
+  background-color: #53e69d;
+  border-color: #53e69d;
+  cursor: pointer;
+}
+
+.btn-primary:not([disabled]):not(.disabled):active,
+.btn-primary:not([disabled]):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle{
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.btn-primary.active.focus, .btn-primary.active:focus,
+.btn-primary.active:hover, .btn-primary.focus,
+.btn-primary.focus:active, .btn-primary:active:focus,
+.btn-primary:active:hover, .btn-primary:focus,
+.open>.dropdown-toggle.btn-primary.focus,
+.open>.dropdown-toggle.btn-primary:focus,
+.open>.dropdown-toggle.btn-primary:hover{
+  background-color: #53e69d;
+  border: 1px solid #53e69d;
+}
+
+.btn-primary.disabled.focus, 
+.btn-primary.disabled:focus, 
+.btn-primary.disabled:hover, 
+.btn-primary.focus, 
+.btn-primary:focus, .btn-primary:hover {
+  background: #53e69d;
+  opacity: .8;
+  border: 1px solid #53e69d;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  opacity: .65;
+  background: #53e69d;
+  border: 1px solid #53e69d;
+  cursor: not-allowed;
+}
+
+.btn-primary:not([disabled]):not(.disabled):active,
+button:focus,
+.form-control:focus,
+.form-control.focus,
+.btn-primary:focus,
+.btn-primary.focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.close{
+  font-size: 16px;
+}
+
+.badge{
+  font-weight: normal;
+}
+/* Малые девайсы («ландшафтные телефоны», >= 576px)*/
+@media (min-width: 576px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+/* Средние девайсы («таблетки», >= 768px)*/
+@media (min-width: 768px) {
+
+  #App-header{
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .container {
+    max-width: 95%;
+  }
+
+}
+
+/* Большие девайсы (десктопы, >= 992px)*/
+@media (min-width: 992px) {
+
+}
+
+/* Экстрабольшие девайсы (большие десктопы, >= 1200px)*/
+@media (min-width: 1200px) {
+
+  .container {
+    max-width: 1140px;
+  }
 }

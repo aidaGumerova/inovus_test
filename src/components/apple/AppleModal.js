@@ -20,7 +20,6 @@ class AppleModal extends Component {
   }
 
   handleChange(val, name) {
-
     let item = this.state.item
     item[name]= val
     this.setState(item)
@@ -32,7 +31,7 @@ class AppleModal extends Component {
         error: true
       });
     }
-    return !this.state.error
+    return !!this.state.item.name
   }
 
   onFocus(){
@@ -46,11 +45,15 @@ class AppleModal extends Component {
   }
 
   submit(item) {
-    if(!this.isValidForm.bind(this)){
+    if(!this.isValidForm.bind(this)()){
+      this.setState({
+        error: true
+      })
       return
-    }else{
-      var updeteItem= Object.assign(item, this.state.item);
-      this.props.saveItem(updeteItem);
+    }
+    else{
+      var updeteItem= Object.assign(item, this.state.item)
+      this.props.saveItem(updeteItem)
     }
   }
 
@@ -59,7 +62,7 @@ class AppleModal extends Component {
 
     return (
       <Modal className={this.props.className} isOpen={this.props.isOpen} toggle={this.props.toggle}>
-        <ModalHeader toggle={this.props.toggle}>Добавить сорт яблок</ModalHeader>
+        <ModalHeader toggle={this.props.toggle}>{this.props.modalTitle}</ModalHeader>
         <Form name={'itemForm'} >
           <ModalBody>
             <FormGroup>
@@ -70,12 +73,6 @@ class AppleModal extends Component {
               {
                 this.state.error && <div className="has-error help-block">Поле обязательно для заполнения</div>
               }
-            </FormGroup>
-            <FormGroup>
-              <Label for="description">Описание</Label>
-              <textarea  type="text" refs="description" name="description" value={this.state.item.description || ''}
-                         className={'form-control form-control-sm'} id="description" autoComplete={'off'}
-                         onChange={(event) => this.handleChange(event.target.value, 'description')}></textarea>
             </FormGroup>
             <FormGroup>
               <Label for="season">Сезон</Label>
@@ -93,9 +90,15 @@ class AppleModal extends Component {
                 }
               </Input>
             </FormGroup>
+            <FormGroup>
+              <Label for="description">Описание</Label>
+              <textarea  type="text" rows="4" refs="description" name="description" value={this.state.item.description || ''}
+                         className={'form-control form-control-sm'} id="description" autoComplete={'off'}
+                         onChange={(event) => this.handleChange(event.target.value, 'description')}></textarea>
+            </FormGroup>
           </ModalBody>
           <ModalFooter>
-            <Button type={'button'} className="btn btn-primary btn-sm" onClick={this.submit.bind(this, item)}>Сохранить</Button>{' '}
+            <Button type={'button'} className="btn btn-primary btn-sm" onClick={this.submit.bind(this, item)} disabled={this.state.error}>Сохранить</Button>{' '}
             <Button color="primary" size="sm" onClick={this.props.toggle}>Закрыть</Button>
           </ModalFooter>
         </Form>

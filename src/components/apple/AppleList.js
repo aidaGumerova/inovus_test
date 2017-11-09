@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Table, Button} from 'reactstrap'
+import { Table, Button, Breadcrumb, BreadcrumbItem, Badge } from 'reactstrap'
+import { Link } from 'react-router-dom'
 import AppleModal  from './AppleModal.js'
 
 class AppleList extends Component {
@@ -23,7 +24,8 @@ class AppleList extends Component {
   toggle() {
     this.setState({
       modalKey: Date.now(),
-      isModalOpened: !this.state.isModalOpened
+      isModalOpened: !this.state.isModalOpened,
+      selectedItems: []
     });
   }
 
@@ -122,7 +124,6 @@ class AppleList extends Component {
       <thead>
       <tr>
         <th></th>
-        <th>#</th>
         <th>Название</th>
         <th>Дата добавления</th>
         <th>Описание</th>
@@ -137,12 +138,11 @@ class AppleList extends Component {
                      checked={this.isItemSelected(item)}
                      onChange={() => this.toggleItem(item)}/>
             </td>
-            <td>{item.id}</td>
             <td>{item.name}</td>
             <td>{new Date(item.dateAdded).toLocaleString()}</td>
             <td>
-              {item.description}<br/>
-              {item.season}
+              <Badge color="primary" pill>{item.season}</Badge><br/>
+              {item.description}
             </td>
           </tr>
         ))
@@ -152,31 +152,39 @@ class AppleList extends Component {
   }
 
   notFound() {
-    return (<div className={'text-center'}>Нет записей</div>)
+    return (<div className={'text-center not-found'}>Нет записей</div>)
   }
 
   render() {
     return (
-      <div>
-        <div className='actions-button-block'>
-          <Button type={'button'} color="primary" size="sm"
-                  onClick={this.showAddModal.bind(this)}>Добавить</Button>{' '}
-          <Button type={'button'} color="primary" size="sm"
-                  onClick={this.showUpdateModal.bind(this)}
-                  disabled={this.disableCreateButton()}>Реактировать</Button>{' '}
-          <Button type={'button'} color="primary" size="sm"
-                  onClick={this.deleteItem.bind(this)}
-                  disabled={this.disableDeleteButton()}>Удалить</Button>
+      <section>
+        <Breadcrumb tag="nav" className={'app-breadcrumb'}>
+          <Link tag="a" className="breadcrumb-item" to={'/'}>Главная</Link>
+          <BreadcrumbItem active tag="span">Список</BreadcrumbItem>
+        </Breadcrumb>
+        <div className={'list-box'}>
+          <h4>Список сортов</h4>
+          <div className='actions-button-block'>
+            <Button type={'button'} color="primary" size="sm"
+                    onClick={this.showAddModal.bind(this)}>Добавить</Button>{' '}
+            <Button type={'button'} color="primary" size="sm"
+                    onClick={this.showUpdateModal.bind(this)}
+                    disabled={this.disableCreateButton()}>Реактировать</Button>{' '}
+            <Button type={'button'} color="primary" size="sm"
+                    onClick={this.deleteItem.bind(this)}
+                    disabled={this.disableDeleteButton()}>Удалить</Button>
+          </div>
+          {
+            this.state.items.length ? this.templateTable() : this.notFound()
+          }
+          <AppleModal key={this.state.modalKey}
+                      item={this.state.editableItem}
+                      isOpen={this.state.isModalOpened}
+                      toggle={this.toggle.bind(this)}
+                      modalTitle={this.state.editableItem.id ? 'Редактировать описание яблока' : 'Добавить новое яблоко'}
+                      saveItem={this.state.editableItem.id ? this.updateItem.bind(this) : this.addItem.bind(this)}/>
         </div>
-        {
-          this.state.items.length ? this.templateTable() : this.notFound()
-        }
-        <AppleModal key={this.state.modalKey}
-                    item={this.state.editableItem}
-                    isOpen={this.state.isModalOpened}
-                    toggle={this.toggle.bind(this)}
-                    saveItem={this.state.editableItem.id ? this.updateItem.bind(this) : this.addItem.bind(this)}/>
-      </div>
+      </section>
     )
   }
 }
