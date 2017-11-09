@@ -25,7 +25,7 @@ class Header extends Component {
       <div id='App-header'>
         <div className='container'>
           <Navbar color="faded" light expand="md">
-            <Link to={'/'} className={'navbar-brand'}>Яблоко</Link>
+            <Link to={'/'} className={'navbar-brand'}>База сортов яблок</Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
